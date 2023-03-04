@@ -10,6 +10,9 @@
 
 
 // Custom definitions may go here
+plugins {
+    id("de.mannodermaus.android-junit5") version "1.8.2.1"
+}
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
@@ -23,7 +26,19 @@ android {
     }
 }
 
+repositories {
+    mavenCentral();
+}
+
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+
+    //Required for running JUNIT tests
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.0"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.0"
+
+    //For running Parameterized Tests
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.6.0"
+
 }
