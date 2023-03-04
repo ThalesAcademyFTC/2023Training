@@ -18,7 +18,9 @@ jobs:
           java-version: 11
           distribution: 'adopt'
 
-      - name: Build all artifacts
+      - name: Build Gradle
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: current
+      - name: Run project gradle
+        run: ./gradlew build --scan
