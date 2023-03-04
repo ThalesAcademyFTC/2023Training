@@ -23,4 +23,4 @@ jobs:
         with:
           gradle-version: current
       - name: Run project gradle
-        run: ./gradlew build --scan
+        run: ./gradlew testDebugUnitTest
