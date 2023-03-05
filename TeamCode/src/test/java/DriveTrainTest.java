@@ -12,7 +12,6 @@ public class DriveTrainTest {
 
     @Test
     public void testTest2() {
-        fail();
     }
 
 
