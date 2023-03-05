@@ -1,26 +1,46 @@
-name: JUNIT Tests
+
+name: CI
 
 on:
   push:
-
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+    
 jobs:
-  build:
+  build_and_test:
+
+    env:
+      BUILD_CONFIG: 'Release'
+      SOLUTION: 'Solution1/UnitTest.sln'
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.3
+    - uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3.10.0
-        with:
-          java-version: 11
-          distribution: 'adopt'
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
 
-      - name: Build Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: current
-      - name: Run project gradle
-        run: ./gradlew testDebugUnitTest
+
+    - name: Restore dependencies
+      run: dotnet restore $SOLUTION
+
+    - name: Build
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG
+      
+    - name: Test
+      run: dotnet test $SOLUTION --configuration $BUILD_CONFIG --logger "trx;LogFileName=test-results.trx" || true
+      
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: DotNET Tests
+        path: "**/test-results.trx"                            
+        reporter: dotnet-trx
+        fail-on-error: true
