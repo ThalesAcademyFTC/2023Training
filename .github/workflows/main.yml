@@ -27,7 +27,7 @@ jobs:
           # Artifact name
           name: Test Results
           # Path of the directory containing the static assets.
-          path: home/runner/work/2023Voltage/2023Voltage/TeamCode/build/reports/tests
+          path: /home/runner/work/2023Voltage/2023Voltage/TeamCode/build/reports/tests
           # Duration after which artifact will expire in days.
           retention-days: 7
         
