@@ -20,3 +20,9 @@ jobs:
 
       - name: Run project gradle
         run: ./gradlew testDebugUnitTest
+
+      - name: HTML Preview
+        uses: pavi2410/html-preview-action@v2
+        with:
+          # The HTML file you want to preview, relative to the root of the repo
+          html_file: file:///home/runner/work/2023Voltage/2023Voltage/TeamCode/build/reports/tests/testDebugUnitTest/index.html
