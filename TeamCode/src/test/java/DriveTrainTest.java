@@ -7,11 +7,17 @@ public class DriveTrainTest {
 
     @Test
     public void testTest() {
-        fail();
+
     }
 
     @Test
     public void testTest2() {
+
+    }
+
+    @Test
+    public void testTest3() {
+        fail();
     }
 
 
