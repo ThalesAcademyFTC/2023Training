@@ -31,7 +31,8 @@ jobs:
           # Duration after which artifact will expire in days.
           retention-days: 7
   deploy:
-  
+    
+    needs: build
     runs-on: ubuntu-latest
     
     permissions:
