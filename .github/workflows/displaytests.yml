@@ -7,10 +7,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
 
     steps:
       - name: Checkout
@@ -31,9 +27,19 @@ jobs:
           # Artifact name
           name: github-pages
           # Path of the directory containing the static assets.
-          path: /home/runner/work/2023Voltage/2023Voltage/TeamCode/build/reports/tests
+          path: /home/runner/work/2023Voltage/2023Voltage/TeamCode/build/reports/tests/testDebugUnitTest
           # Duration after which artifact will expire in days.
           retention-days: 7
-        
+  deploy:
+    
+    needs: build
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      
+    steps:
       - name: Deploy GitHub Pages site
         uses: actions/deploy-pages@v1.2.4
