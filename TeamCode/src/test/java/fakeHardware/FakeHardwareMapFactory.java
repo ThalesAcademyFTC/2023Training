@@ -1,6 +1,14 @@
 package fakeHardware;
 
 import androidx.annotation.NonNull;
+import fakeHardware.drive.FakeCRServo;
+import fakeHardware.drive.FakeDcMotor;
+import fakeHardware.drive.FakeRevBlinkinLedDriver;
+import fakeHardware.drive.FakeServo;
+import fakeHardware.sensors.FakeDigitalChannel;
+import fakeHardware.sensors.FakeDistanceSensor;
+import fakeHardware.sensors.FakeRevTouchSensor;
+import fakeHardware.sensors.FakeVoltageSensor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -8,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +27,7 @@ import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class FakeHardwareMapFactory {
 
@@ -40,8 +50,8 @@ public class FakeHardwareMapFactory {
      * @param hardwareMapName the name of the hardware map XML file
      * @return a HardwareMap that provides fake implementations for devices found in the file
      */
-    @SneakyThrows
-    public static HardwareMap getFakeHardwareMap(@NonNull final String hardwareMapName)  {
+
+    public static HardwareMap getFakeHardwareMap(@NonNull final String hardwareMapName) throws IOException, ParserConfigurationException, SAXException {
         String path = String.format("src/main/res/xml/%s", hardwareMapName);
 
         return getFakeHardwareMap(new File(path));
@@ -50,8 +60,7 @@ public class FakeHardwareMapFactory {
     /**
      * Loads the hardware map from the given path
      */
-    @SneakyThrows
-    public static HardwareMap getFakeHardwareMap(@NonNull final File hardwareMapFile) {
+    public static HardwareMap getFakeHardwareMap(@NonNull final File hardwareMapFile) throws IOException, ParserConfigurationException, SAXException {
         HardwareMapCreator hwMapCreator = new HardwareMapCreator();
 
         if (!hardwareMapFile.exists()) {
@@ -70,10 +79,9 @@ public class FakeHardwareMapFactory {
     private static class HardwareMapCreator {
         private Set<String> deviceNames = new HashSet<>();
 
-        private HardwareMap hardwareMap = new HardwareMap(null);
+        private HardwareMap hardwareMap = new HardwareMap(null,null);
 
-        @SneakyThrows
-        private void parseUsingDocBuilder(InputStream fileInput) {
+        private void parseUsingDocBuilder(InputStream fileInput) throws ParserConfigurationException, IOException, SAXException {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(fileInput);
@@ -171,11 +179,11 @@ public class FakeHardwareMapFactory {
             addDevices(dcMotors, new DeviceFromXml() {
                 @Override
                 public void addDeviceToHardwareMap(String name, int portNumber) {
-                    final FakeDcMotorEx fakeDcMotorEx = new FakeDcMotorEx();
+                    final FakeDcMotor fakeDcMotor = new FakeDcMotor();
 
-                    hardwareMap.put(name, fakeDcMotorEx);
+                    hardwareMap.put(name, fakeDcMotor);
 
-                    hardwareMap.dcMotor.put(name, fakeDcMotorEx);
+                    hardwareMap.dcMotor.put(name, fakeDcMotor);
                 }
             });
         }

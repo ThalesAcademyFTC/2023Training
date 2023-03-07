@@ -9,11 +9,11 @@ public class GabeSpark {
     /* Hardware map for the opmode */
     HardwareMap hwMap;
 
-    DcMotor motor1, motor2, motor3, motor4;
-    DcMotor[] forward, left, right;
+    public DcMotor motor1, motor2, motor3, motor4;
+    public DcMotor[] forward, left, right;
 
-    public GabeSpark(OpMode opMode){
-        hwMap = opMode.hardwareMap;
+    public GabeSpark(HardwareMap hardwareMap){
+        hwMap = hardwareMap;
 
         motor1 = hwMap.dcMotor.get("motor1");
         motor2 = hwMap.dcMotor.get("motor2");

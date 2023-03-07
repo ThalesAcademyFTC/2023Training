@@ -16,7 +16,7 @@ public class GabeTele extends OpMode {
 
     @Override
     public void init() {
-        robot = new GabeSpark(this);
+        robot = new GabeSpark(hardwareMap);
     }
 
     @Override

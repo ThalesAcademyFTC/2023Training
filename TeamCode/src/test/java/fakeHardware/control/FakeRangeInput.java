@@ -1,4 +1,4 @@
-package fakeHardware;
+package fakeHardware.control;
 
 /**
  * This FakeRangeInput is meant to provide a template for ranged input. Intended for testing without the robot.

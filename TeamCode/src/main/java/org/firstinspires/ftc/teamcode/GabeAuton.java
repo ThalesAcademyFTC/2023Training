@@ -15,7 +15,7 @@ public class GabeAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new GabeSpark(this);
+        robot = new GabeSpark(hardwareMap);
         runtime.reset();
 
         waitForStart();

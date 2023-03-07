@@ -1,4 +1,4 @@
-package fakeHardware;
+package fakeHardware.control;
 
 /**
  * The FakeOnOffButton is meant to provide fake on/off trigger for testing the robot using code.
