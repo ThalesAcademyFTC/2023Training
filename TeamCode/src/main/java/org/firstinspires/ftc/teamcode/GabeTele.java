@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+@TeleOp(name="GabeTele")
+//@Disabled
 public class GabeTele extends OpMode {
 
     private GabeSpark robot;
