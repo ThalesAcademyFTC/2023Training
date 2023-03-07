@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.GabeSpark;
+import org.firstinspires.ftc.teamcode.GabeTele;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -57,6 +58,8 @@ public class SampleHardwareMapTest {
         assertEquals(robot.motor2.getPower(), 0);
         assertEquals(robot.motor3.getPower(), 0);
         assertEquals(robot.motor4.getPower(), 0);
+
+
     }
 
 
