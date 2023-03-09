@@ -8,11 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //@Disabled
 public class GabeTele extends OpMode {
 
-    private GabeSpark robot;
-
-    public static final double MAXIMUM_SPEED = 0.8;
-
-    private static final int NINETY_DEGREES = 440;
+    public GabeSpark robot;
 
     @Override
     public void init() {
@@ -30,7 +26,7 @@ public class GabeTele extends OpMode {
             }
 
             if (Math.abs(gamepad1.left_stick_x) > 0.3) {
-                robot.turnLeft(gamepad1.left_stick_x);
+                robot.turnLeft(-gamepad1.left_stick_x);
             }
 
         }
