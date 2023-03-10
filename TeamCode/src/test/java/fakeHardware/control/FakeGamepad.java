@@ -3,6 +3,9 @@ package fakeHardware.control;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class FakeGamepad extends Gamepad {
+
+    private boolean resting;
+
     public void pressA(){
         a = true;
     }
@@ -118,11 +121,25 @@ public class FakeGamepad extends Gamepad {
     public void setLeftStick(float x,  float y){
         left_stick_x = x;
         left_stick_y = -y; //Negates y because gamepad y is flipped
+
     }
 
     public void setRightStick(float x,  float y){
         right_stick_x = x;
         right_stick_y = -y; //Negates y because gamepad y is flipped
+    }
+
+    @Override
+    public boolean atRest(){
+        if (Math.abs(left_stick_x) > 0 || Math.abs(left_stick_y) > 0){
+            resting = false;
+        } else if (Math.abs(right_stick_x) > 0 || Math.abs(right_stick_y) > 0){
+            resting = false;
+        } else {
+            resting = true;
+        }
+
+        return resting;
     }
 
 

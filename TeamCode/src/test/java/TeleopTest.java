@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 
@@ -23,17 +24,17 @@ public class TeleopTest {
 
     //Note, the only two things you would need to change to swap Teleops would be GabeTele
     //You could put in whatever Teleop opmode you want here
-    static GabeTele tele = new GabeTele();
+    GabeTele tele = new GabeTele();
 
-    static FakeGamepad gamepad1 = new FakeGamepad();
+    FakeGamepad gamepad1 = new FakeGamepad();
 
-    static FakeGamepad gamepad2 = new FakeGamepad();
+    FakeGamepad gamepad2 = new FakeGamepad();
 
     Thread Opmode;
 
 
 
-    private void startTeleopLoop(){
+   private void startTeleopLoop(){
         Opmode = new Thread(new Runnable() {
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
@@ -64,8 +65,6 @@ public class TeleopTest {
 
         //Initializes Gamepads. Necessary because phone is not running the code, we are
         //Kinda scary right?
-        tele.gamepad1 = new FakeGamepad();
-        tele.gamepad2 = new FakeGamepad();
 
     }
 
@@ -109,10 +108,11 @@ public class TeleopTest {
         //-----------------------------------------------
     }
 
+    @Order(3)
     @Test
     public void moveForwardTest(){
+       startTeleopLoop();
         //Start Teleop Loop here for main loop tests
-        startTeleopLoop();
 
         //Here is where any gamepad commands and tests would go.
 
@@ -127,11 +127,13 @@ public class TeleopTest {
         assertEquals(1, tele.robot.motor3.getPower());
         assertEquals(1, tele.robot.motor4.getPower());
 
-    }
+        Opmode.interrupt();
 
+    }
+    @Order(1)
     @Test
     public void turnLeftTest() {
-        startTeleopLoop();
+       startTeleopLoop();
 
         gamepad1.setLeftStick(-1,0);
 
@@ -142,10 +144,13 @@ public class TeleopTest {
         assertEquals(-1, tele.robot.motor3.getPower());
         assertEquals(1, tele.robot.motor4.getPower());
 
+        Opmode.interrupt();
     }
+
+    @Order(2)
     @Test
     public void turnRightTest() {
-        startTeleopLoop();
+       startTeleopLoop();
 
         gamepad1.setLeftStick(1,0);
 
@@ -156,7 +161,8 @@ public class TeleopTest {
         assertEquals(1, tele.robot.motor3.getPower());
         assertEquals(-1, tele.robot.motor4.getPower());
 
-
+        Opmode.interrupt();
+        tele.robot.rest();
     }
 
     @BeforeEach
