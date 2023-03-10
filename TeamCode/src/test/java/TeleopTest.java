@@ -107,13 +107,13 @@ public class TeleopTest {
         assertEquals(0, tele.robot.motor4.getPower());
 
         //-----------------------------------------------
-
-        //Start Teleop Loop here for main loop tests
-        startTeleopLoop();
     }
 
     @Test
     public void moveForwardTest(){
+        //Start Teleop Loop here for main loop tests
+        startTeleopLoop();
+
         //Here is where any gamepad commands and tests would go.
 
         gamepad1.setLeftStick(0,1);
@@ -131,6 +131,7 @@ public class TeleopTest {
 
     @Test
     public void turnLeftTest() {
+        startTeleopLoop();
 
         gamepad1.setLeftStick(-1,0);
 
@@ -144,6 +145,7 @@ public class TeleopTest {
     }
     @Test
     public void turnRightTest() {
+        startTeleopLoop();
 
         gamepad1.setLeftStick(1,0);
 
