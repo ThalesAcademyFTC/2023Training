@@ -1,4 +1,5 @@
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.GabeTele;
 import org.junit.jupiter.api.AfterAll;
@@ -50,9 +51,6 @@ public class TeleopTest {
         //Initializes Gamepads. Necessary because phone is not running the code, we are
         //Kinda scary right?
 
-        tele.gamepad1 = new FakeGamepad();
-        tele.gamepad2 = new FakeGamepad();
-
     }
 
     @Order(0)
@@ -65,32 +63,20 @@ public class TeleopTest {
         //Any post-initialization tests would go below
         tele.robot.rest();
 
-        assertEquals(0, tele.robot.motor1.getPower());
-        assertEquals(0, tele.robot.motor2.getPower());
-        assertEquals(0, tele.robot.motor3.getPower());
-        assertEquals(0, tele.robot.motor4.getPower());
+        testAtRest();
 
         tele.robot.moveForward(1);
 
-        assertEquals(1, tele.robot.motor1.getPower());
-        assertEquals(1, tele.robot.motor2.getPower());
-        assertEquals(1, tele.robot.motor3.getPower());
-        assertEquals(1, tele.robot.motor4.getPower());
+        testMoveForward(1);
 
 
         tele.robot.turnLeft(0.5);
 
-        assertEquals(-0.5, tele.robot.motor1.getPower());
-        assertEquals(0.5, tele.robot.motor2.getPower());
-        assertEquals(-0.5, tele.robot.motor3.getPower());
-        assertEquals(0.5, tele.robot.motor4.getPower());
+        testTurnLeft(0.5);
 
         tele.robot.rest();
 
-        assertEquals(0, tele.robot.motor1.getPower());
-        assertEquals(0, tele.robot.motor2.getPower());
-        assertEquals(0, tele.robot.motor3.getPower());
-        assertEquals(0, tele.robot.motor4.getPower());
+        testAtRest();
 
         //-----------------------------------------------
 
@@ -110,13 +96,9 @@ public class TeleopTest {
 
         //This code is necessary to update the Teleop GamePad, after each gamepad command
 
-        assertEquals(-1, tele.gamepad1.left_stick_y);
-        assertEquals(0, tele.gamepad1.left_stick_x);
-
-        assertEquals(1, tele.robot.motor1.getPower());
-        assertEquals(1, tele.robot.motor2.getPower());
-        assertEquals(1, tele.robot.motor3.getPower());
-        assertEquals(1, tele.robot.motor4.getPower());
+        //-----------------------------------------------
+        // Any tests on the robot after gamepad commands take effect
+        testMoveForward(1);
 
     }
 
@@ -130,10 +112,7 @@ public class TeleopTest {
         tele.loop();
 
 
-        assertEquals(-1, tele.robot.motor1.getPower());
-        assertEquals(1, tele.robot.motor2.getPower());
-        assertEquals(-1, tele.robot.motor3.getPower());
-        assertEquals(1, tele.robot.motor4.getPower());
+        testTurnLeft(1);
 
     }
 
@@ -148,10 +127,7 @@ public class TeleopTest {
         tele.loop();
 
 
-        assertEquals(1, tele.robot.motor1.getPower());
-        assertEquals(-1, tele.robot.motor2.getPower());
-        assertEquals(1, tele.robot.motor3.getPower());
-        assertEquals(-1, tele.robot.motor4.getPower());
+        testTurnRight(1);
 
     }
 
@@ -161,6 +137,40 @@ public class TeleopTest {
         gamepad2 = new FakeGamepad();
         tele.gamepad1 = new FakeGamepad();
         tele.gamepad2 = new FakeGamepad();
+    }
+
+    //Relevant functions to make life easier
+
+    private void testMoveForward(double pace){
+        for ( DcMotor x: tele.robot.forward ) {
+            assertEquals(pace, x.getPower());
+        }
+    }
+
+    private void testMoveBackward(double pace){
+        for ( DcMotor x: tele.robot.forward ) {
+            assertEquals(-pace, x.getPower());
+        }
+    }
+
+    private void testTurnLeft(double pace){
+        assertEquals(-pace, tele.robot.motor1.getPower());
+        assertEquals(pace, tele.robot.motor2.getPower());
+        assertEquals(-pace, tele.robot.motor3.getPower());
+        assertEquals(pace, tele.robot.motor4.getPower());
+    }
+
+    private void testTurnRight(double pace){
+        assertEquals(pace, tele.robot.motor1.getPower());
+        assertEquals(-pace, tele.robot.motor2.getPower());
+        assertEquals(pace, tele.robot.motor3.getPower());
+        assertEquals(-pace, tele.robot.motor4.getPower());
+    }
+
+    private void testAtRest(){
+        for ( DcMotor x: tele.robot.forward ) {
+            assertEquals(0, x.getPower());
+        }
     }
 
 
