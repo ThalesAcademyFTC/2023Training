@@ -39,10 +39,10 @@
     -->
 
     <LynxUsbDevice
-        name="Expansion Hub Portal 1"
-        serialNumber="[...]" parentModuleAddress="5">
+        name="Control Hub Portal"
+        serialNumber="(embedded)" parentModuleAddress="5">
 
-        <LynxModule name="[...]" port="[...]">
+        <LynxModule name="Control Hub" port="5">
 
             <!-- The built-in IMU is always port="0" bus="0" -->
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
@@ -70,58 +70,10 @@
 
             ************************************************************* -->
 
-            <Motor name=".."  port="[...]" /> <!-- Yellow -->
-
-            <!--
-            Andymark Gearmotors
-
-            IMPORTANT: The NeveRest20GearMotor type does not contain
-            appropriate values for the orbital gear motor! You will need to
-            set these directly in software (at least for now)
-            -->
-
-            <NeveRest3.7v1Gearmotor name="[...]" port="[...]" />
-            <NeveRest20Gearmotor name="[...]" port="[...]" />
-            <NeveRest40Gearmotor name="[...]" port="[...]" />
-            <NeveRest60Gearmotor name="[...]" port="[...]" />
-
-            <!--
-            REV Robotics Gearmotors
-            -->
-
-            <RevRobotics20HDHexMotor name="[...]" port="[...]" />
-            <RevRobotics40HDHexMotor name="[...]" port="[...]" />
-            <RevRoboticsCoreHexMotor name="[...]" port="[...]" />
-
-            <!--
-            GoBILDA Gearmotors
-             -->
-
-            <goBILDA5201SeriesMotor name="[...]" port="[...]" />
-            <goBILDA5202SeriesMotor name="[...]" port="[...]" />
-
-            <!--
-            Tetrix Gearmotors
-            -->
-
-            <TetrixMotor  name="[...]" port="[...]" />
-
-            <!-- *************************************************************
-
-            Servos are pretty straightforward. Ports are numbered 0-5
-
-            Configuring a servo as a ContinuousRotationServo in this file
-            will present an interface in software that "feels" more like a
-            DCMotor for servos that are, or are able to be put into continuous
-            rotation mode.
-
-            See com.qualcomm.robotcore.hardware.CRServo in the SDK for more
-            details.
-
-            ************************************************************* -->
-
-            <Servo name="[...] port=[...]" />
-            <ContinuousRotationServo name="[...]" port="[...]" />
+            <goBILDA5202SeriesMotor name="motor1" port="0" />
+            <goBILDA5202SeriesMotor name="motor2" port="1" />
+            <goBILDA5202SeriesMotor name="motor3" port="2" />
+            <goBILDA5202SeriesMotor name="motor4" port="3" />
 
             <!--
 
@@ -130,8 +82,6 @@
             your code they are of type DcMotorSimple.
 
             -->
-
-            <RevSPARKMini name="[...]" port="[...]" />
 
             <!-- *************************************************************
 
@@ -155,49 +105,24 @@
 
             ************************************************************* -->
 
-            <DigitalDevice name="[...]" port="[... (odd)]" />
-            <RevTouchSensor name="[...] port=[... (odd)]" />
+            <DigitalDevice name="armTouch" port="1" />
 
-            <!-- *************************************************************
-
-            I2C Devices
-
-            Bus numbers (sockets on the hub) run from 0 to 3. An I2C device
-            plugged into the physical socket labeled "0" on the hub should use
-            port="1" and bus="0". I2C devices plugged into sockets labeled 1-3
-            on the hub should use port="0" and bus="[socket number on hub]"
-
-            ************************************************************* -->
-
-            <!-- REV Time-of-Flight 2m Distance Sensor -->
-            <REV_VL53L0X_RANGE_SENSOR name="[...]" port="0" bus="[...]" />
-
-            <!-- V1 and V2 of the REV color/distance sensor -->
-
-            <LynxColorSensor name="[...]" port="0" bus="[...]" />
-
-            <!--
-
-            Use for the current v3 REV color sensor. NOTE that color and
-              distance values for v3 differ from V1-V2!
-
-            http://www.revrobotics.com/rev-31-1557/)
-
-            -->
-
-            <RevColorSensorV3 name="[...]" port="0" bus="[...]" />
-
-            <RevBlinkinLedDriver name="[...]" port="0" bus="[...]" />
         </LynxModule>
 
-        <LynxModule name="Secondary Hub" port="3">
+        <LynxModule name="Expansion Hub 3" port="3">
 
             <!-- *************************************************************
 
             Add devices here that are plugged into the secondary REV expansion
             hub, following the syntax above.
 
+
+
             ************************************************************* -->
+
+            <goBILDA5202SeriesMotor name="armMotor" port="0" />
+
+            <Servo name="clawServo" port="0" />
 
         </LynxModule>
     </LynxUsbDevice>
