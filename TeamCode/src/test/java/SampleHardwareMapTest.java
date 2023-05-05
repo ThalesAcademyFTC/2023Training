@@ -3,8 +3,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.GabeSpark;
-import org.firstinspires.ftc.teamcode.GabeTele;
+import org.firstinspires.ftc.teamcode.Spark;
+import org.firstinspires.ftc.teamcode.Tele;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -28,7 +28,7 @@ public class SampleHardwareMapTest {
             fail(e.getMessage());
         }
 
-        GabeSpark robot = new GabeSpark(hwMap);
+        Spark robot = new Spark(hwMap);
 
         robot.rest();
 

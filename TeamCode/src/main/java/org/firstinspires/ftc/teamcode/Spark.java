@@ -17,10 +17,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Spark {
 
-    public static final int PRIMED = 1000;
-    public static final int LOW = 1500;
-    public static final int MEDIUM = 3000;
-    public static final int HIGH = 4170;
     //Define servo and motor variables
     public DcMotor motor1, motor2, motor3, motor4;
     public CRServo crservo1;
@@ -43,16 +39,20 @@ public class Spark {
         TANK
     }
 
-    public enum ArmState {
-        prime,
-        load,
-        high,
-        med,
-        low,
-        normal
+    //Constructor for Testing HardwareMap
+    public Spark(HardwareMap hwMap) {
+        this.hwMap = hwMap;
+
+        this.tele = new Tele();
+
+        telemetry = tele.telemetry;
+
+        drive = Drivetrain.MECHANUM;
+
+        setupHardware(drive);
+
     }
 
-    Spark.ArmState armStatus = Spark.ArmState.normal;
 
     //Constructor for Teleop
     public Spark(OpMode opmode, Drivetrain type) {
@@ -114,20 +114,12 @@ public class Spark {
                 motor2 = hwMap.dcMotor.get("motor2");
                 motor3 = hwMap.dcMotor.get("motor3");
                 motor4 = hwMap.dcMotor.get("motor4");
-                clawServo = hwMap.servo.get("clawServo");
-                armMotor = hwMap.dcMotor.get("armMotor");
-                //armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                armTouch = hwMap.get(DigitalChannel.class, "armTouch");
-                armTouch.setMode(DigitalChannel.Mode.INPUT);
                 //Set directions to ensure that robot moves forward when
                 //all motor power is 1
                 motor1.setDirection(DcMotor.Direction.REVERSE);
                 motor2.setDirection(DcMotor.Direction.FORWARD);
                 motor3.setDirection(DcMotor.Direction.REVERSE);
                 motor4.setDirection(DcMotor.Direction.FORWARD);
-                armMotor.setDirection(DcMotor.Direction.REVERSE);
-                armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                //Add motors to arrays
                 //forward array contains all motors
                 forward = new DcMotor[]{motor1, motor2, motor3, motor4};
                 //left array contains motors that move at -1 power to turn left
@@ -186,24 +178,6 @@ public class Spark {
         for (DcMotor x : special) x.setPower(pace);
     }
 
-    public void armUp(double pace) {
-        armMotor.setPower(pace);
-    }
-
-    public void armDown(double pace) {
-        if (armIsDown()){
-            armStop();
-        } else {
-            armMotor.setPower(-pace);
-        }
-    }
-
-    public void armStop(){
-        armMotor.setPower(0);
-    }
-
-    public boolean armIsDown() { return armTouch.getState(); }
-
     // Prioritizes turning over lateral movement when both are happening at the same time
     public void mechanumMovT(double x, double y, double turn){
         double angle = Math.atan2(y,x); //Finds direction joystick is pointing
@@ -256,7 +230,6 @@ public class Spark {
         while (auton.opModeIsActive() && !finished && !auton.isStopRequested()) {
             for (DcMotor x : forward) {
                 if (x.getCurrentPosition() >= x.getTargetPosition() + 2 || x.getCurrentPosition() <= x.getTargetPosition() - 2) {
-                    checkArm();
                     telemetry.addData("motor1", motor1.getCurrentPosition());
                     telemetry.addData("motor2", motor2.getCurrentPosition());
                     telemetry.addData("motor3", motor3.getCurrentPosition());
@@ -380,227 +353,5 @@ public class Spark {
 
         resetDriveEncoders();
     }
-    public void armUpFT(int ticks, double speed) {
-        //Blocks until the robot has gotten to the desired location.
-        this.rest();
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setTargetPosition(ticks);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        armUp(speed);
-
-        while (auton.opModeIsActive() && !auton.isStopRequested()) {
-            if (armMotor.getCurrentPosition() >= armMotor.getTargetPosition() + 2 || armMotor.getCurrentPosition() <= armMotor.getTargetPosition() - 2) {
-                telemetry.addData("armMotor", armMotor.getCurrentPosition());
-                telemetry.update();
-                continue;
-            } else {
-                break;
-            }
-        }
-        armMotor.setPower(0);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-    }
-    public void armDownFT(int ticks, double speed) {
-        //Blocks until the robot has gotten to the desired location.
-        this.rest();
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setTargetPosition(-ticks);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armDown(speed);
-
-        while (auton.opModeIsActive() && !auton.isStopRequested()) {
-            if (armIsDown()){
-                break;
-            }
-            if (armMotor.getCurrentPosition() >= armMotor.getTargetPosition() + 2 || armMotor.getCurrentPosition() <= armMotor.getTargetPosition() - 2) {
-                telemetry.addData("armMotor", armMotor.getCurrentPosition());
-                telemetry.update();
-                continue;
-            } else {
-                break;
-            }
-        }
-        armMotor.setPower(0);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    //0.08 Scissor Position
-    public void servoClose() {
-        clawServo.setPosition(0.08);
-    }
-
-    //0.15 Starting Position to Pick Up Cone
-    public void servoOpen() {
-        clawServo.setPosition(0.15);
-    }
-
-    public void servoPrepare() {
-        clawServo.setPosition(0.3);
-    }
-
-    public void waitForArm(){
-        while (armMotor.getCurrentPosition() >= armMotor.getTargetPosition() + 2 || armMotor.getCurrentPosition() <= armMotor.getTargetPosition() - 2) {
-            telemetry.addData("armMotor", armMotor.getCurrentPosition());
-            telemetry.update();
-            if (!auton.opModeIsActive() || auton.isStopRequested()){
-                break;
-            }
-            continue;
-        }
-    }
-    public void armLoad() {
-        armDown(0.5);
-        while(!armIsDown() && auton.opModeIsActive() && !auton.isStopRequested()) {
-            continue;
-        }
-        armStop();
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        auton.sleep(100);
-        servoClose();
-    }
-
-    public void armPrimed() {
-        armMotor.setTargetPosition(PRIMED);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-
-        waitForArm();
-
-        armStop();
-    }
-
-    public void armLow() {
-        armMotor.setTargetPosition(LOW);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-
-        waitForArm();
-
-        armStop();
-    }
-
-    public void armMedium() {
-        armMotor.setTargetPosition(MEDIUM);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-
-        waitForArm();
-
-        armStop();
-    }
-
-    public void armHigh() {
-        armMotor.setTargetPosition(HIGH);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-
-        waitForArm();
-
-        armStop();
-    }
-
-    public void armLoadTele() {
-        armDown(0.5);
-
-        armStatus = Spark.ArmState.load;
-    }
-
-    public void armPrimedTele() {
-        armMotor.setTargetPosition(PRIMED);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-        armStatus = Spark.ArmState.prime;
-    }
-
-    public void armLowTele() {
-        armMotor.setTargetPosition(LOW);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-        armStatus = Spark.ArmState.low;
-    }
-
-    public void armMediumTele() {
-        armMotor.setTargetPosition(MEDIUM);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-        armStatus = Spark.ArmState.med;
-    }
-
-    public void armHighTele() {
-        armMotor.setTargetPosition(HIGH);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-        armStatus = Spark.ArmState.high;
-    }
-
-    public void armSet() {
-        armMotor.setTargetPosition(PRIMED);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armUp(0.5);
-
-        waitForArm();
-
-        armStop();
-
-    }
-
-    public boolean checkArm(){
-
-        //Initial check to stop arm if too low
-
-        if (armStatus != Spark.ArmState.normal) {
-
-            if (armStatus == Spark.ArmState.load){
-                if (armIsDown()){
-
-                    armStop();
-                    armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    servoClose();
-                    armStatus = Spark.ArmState.normal;
-                    armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    return false;
-                }
-                return true;
-            }
-
-            if ((armMotor.getCurrentPosition() >= armMotor.getTargetPosition() + 2 || armMotor.getCurrentPosition() <= armMotor.getTargetPosition() - 2)) {
-                telemetry.addData("armMotor", armMotor.getCurrentPosition());
-                telemetry.update();
-            } else {
-                armStop();
-
-                if (armStatus == Spark.ArmState.prime) {
-                    servoOpen();
-                }
-
-                armStatus = Spark.ArmState.normal;
-                armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void armOverride(){
-        if (checkArm()) {
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-    }
 }

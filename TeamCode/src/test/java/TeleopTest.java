@@ -1,7 +1,6 @@
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.teamcode.GabeTele;
+import org.firstinspires.ftc.teamcode.Tele;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import fakeHardware.FakeHardwareMapFactory;
 import fakeHardware.control.FakeGamepad;
@@ -25,11 +25,16 @@ public class TeleopTest {
 
     //Note, the only two things you would need to change to swap Teleops would be GabeTele
     //You could put in whatever Teleop opmode you want here
-    private static GabeTele tele = new GabeTele();
+    private static Tele tele = new Tele();
 
     private static FakeGamepad gamepad1 = new FakeGamepad();
 
     private static FakeGamepad gamepad2 = new FakeGamepad();
+
+    // This is just used to round to two decimal places.
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
+    private final static double MECHANUM_MAX_SPEED = 0.7071067811865;
 
     private void updateGamepads() {
         tele.gamepad1.copy(gamepad1);
@@ -48,9 +53,6 @@ public class TeleopTest {
             fail(e.getMessage());
         }
 
-        //Initializes Gamepads. Necessary because phone is not running the code, we are
-        //Kinda scary right?
-
     }
 
     @Order(0)
@@ -67,12 +69,12 @@ public class TeleopTest {
 
         tele.robot.moveForward(1);
 
-        testMoveForward(1);
+        testMoveForward( 1 );
 
 
         tele.robot.turnLeft(0.5);
 
-        testTurnLeft(0.5);
+        testTurnLeft(0.5 );
 
         tele.robot.rest();
 
@@ -98,14 +100,14 @@ public class TeleopTest {
 
         //-----------------------------------------------
         // Any tests on the robot after gamepad commands take effect
-        testMoveForward(1);
+        testMoveForward( MECHANUM_MAX_SPEED );
 
     }
 
     @Test
     public void turnLeftTest() {
 
-        gamepad1.setLeftStick(-1, 0);
+        gamepad1.setRightStick(-1, 0);
         updateGamepads();
 
         //Runs the main teleop loop
@@ -120,7 +122,7 @@ public class TeleopTest {
     public void turnRightTest() {
 
 
-        gamepad1.setLeftStick(1, 0);
+        gamepad1.setRightStick(1, 0);
         updateGamepads();
 
         //Runs the main teleop loop
@@ -143,28 +145,28 @@ public class TeleopTest {
 
     private void testMoveForward(double pace){
         for ( DcMotor x: tele.robot.forward ) {
-            assertEquals(pace, x.getPower());
+            assertEquals(df.format(pace), df.format(x.getPower()));
         }
     }
 
     private void testMoveBackward(double pace){
         for ( DcMotor x: tele.robot.forward ) {
-            assertEquals(-pace, x.getPower());
+            assertEquals(df.format(-pace), df.format(x.getPower()));
         }
     }
 
     private void testTurnLeft(double pace){
-        assertEquals(-pace, tele.robot.motor1.getPower());
-        assertEquals(pace, tele.robot.motor2.getPower());
-        assertEquals(-pace, tele.robot.motor3.getPower());
-        assertEquals(pace, tele.robot.motor4.getPower());
+        assertEquals(df.format(-pace), df.format(tele.robot.motor1.getPower()));
+        assertEquals(df.format(pace), df.format(tele.robot.motor2.getPower()));
+        assertEquals(df.format(-pace), df.format(tele.robot.motor3.getPower()));
+        assertEquals(df.format(pace), df.format(tele.robot.motor4.getPower()));
     }
 
     private void testTurnRight(double pace){
-        assertEquals(pace, tele.robot.motor1.getPower());
-        assertEquals(-pace, tele.robot.motor2.getPower());
-        assertEquals(pace, tele.robot.motor3.getPower());
-        assertEquals(-pace, tele.robot.motor4.getPower());
+        assertEquals(df.format(pace), df.format(tele.robot.motor1.getPower()));
+        assertEquals(df.format(-pace), df.format(tele.robot.motor2.getPower()));
+        assertEquals(df.format(pace), df.format(tele.robot.motor3.getPower()));
+        assertEquals(df.format(-pace), df.format(tele.robot.motor4.getPower()));
     }
 
     private void testAtRest(){
