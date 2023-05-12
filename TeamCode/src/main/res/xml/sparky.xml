@@ -105,7 +105,6 @@
 
             ************************************************************* -->
 
-            <DigitalDevice name="armTouch" port="1" />
 
         </LynxModule>
 
@@ -121,6 +120,7 @@
             ************************************************************* -->
 
             <goBILDA5202SeriesMotor name="armMotor" port="0" />
+            <goBILDA5202SeriesMotor name="carouselMotor" port="1" />
 
             <Servo name="clawServo" port="0" />
 

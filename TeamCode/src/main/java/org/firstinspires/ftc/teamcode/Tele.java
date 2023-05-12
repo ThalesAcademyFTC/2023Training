@@ -17,12 +17,20 @@ public class Tele extends OpMode {
 
     @Override
     public void loop() {
+  
+            
+        
 
         if (gamepad1.atRest()) robot.rest();
         else {
 
             robot.mechanumMovT( gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
 
+        
+          
         }
-    }
+    }         
 }
+
+
+

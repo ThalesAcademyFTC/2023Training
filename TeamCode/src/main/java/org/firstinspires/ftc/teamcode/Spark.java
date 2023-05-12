@@ -114,6 +114,9 @@ public class Spark {
                 motor2 = hwMap.dcMotor.get("motor2");
                 motor3 = hwMap.dcMotor.get("motor3");
                 motor4 = hwMap.dcMotor.get("motor4");
+                carouselMotor = hwMap.dcMotor.get("carouselMotor");
+                armMotor = hwMap.dcMotor.get("armMotor");
+                clawServo = hwMap.dcMotor.get("clawMotor");
                 //Set directions to ensure that robot moves forward when
                 //all motor power is 1
                 motor1.setDirection(DcMotor.Direction.REVERSE);
@@ -353,5 +356,37 @@ public class Spark {
 
         resetDriveEncoders();
     }
+
+    public void upArmMotor(double speed) {
+
+        armMotor.setPower(speed);
+        
+    }
+
+    public void downArmMotor(double speed) {
+        armMotor.setPower(-speed);
+    }
+
+
+//==================CLAW==================\\
+    public void clawAuton(int degrees) {
+        map(degrees, 0, 180, 0, 1);
+        clawServo.setPosition(degrees);
+    }
+    
+    public void clawOpenTele() {
+        clawServo.setPosition(1);
+    }
+
+    public void clawCloseTele() {
+        clawServo.setPosition(0);
+    }
+
+    public void moveSpinny (double speed) {
+        carouselMotor.setPower(speed);
+    }
+
+    // public void explode (int ticks, double speed) { bombTimer.setTime(69); }
+      
 
 }
