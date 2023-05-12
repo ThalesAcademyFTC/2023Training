@@ -1,6 +1,6 @@
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.Tele;
+import org.firstinspires.ftc.teamcode.quiffeltele;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TeleopTest {
+public class testquiffeltele {
 
     //Note, the only two things you would need to change to swap Teleops would be GabeTele
     //You could put in whatever Teleop opmode you want here
-    private static Tele tele = new quiffeltele();
+    private static quiffeltele tele = new quiffeltele();
 
     private static FakeGamepad gamepad1 = new FakeGamepad();
 
@@ -45,7 +45,7 @@ public class TeleopTest {
     public void setupTeleTests(){
 
         //Also may need to adjust the hardwareMap path
-        File hardwareMapFile = new File("src/test/res/xml/sample_hardware_map.xml");
+        File hardwareMapFile = new File("src/main/res/xml/sparky.xml");
 
         try {
             tele.hardwareMap = FakeHardwareMapFactory.getFakeHardwareMap(hardwareMapFile);

@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Tele")
-@Disabled
-public class Tele extends OpMode {
+@TeleOp(name="QuiffelTele")
+//@Disabled
+public class quiffeltele extends OpMode {
 
     public Spark robot;
 
@@ -35,25 +35,25 @@ public class Tele extends OpMode {
             }
 
             //counter-clockwise carousel
-            if (gamepad.right_bumper) {
+            if (gamepad1.right_bumper) {
                 robot.moveSpinny(-1);
             }
                 
             if(gamepad1.dpad_up) {
-                robot.upArmMotor(gamepad1.dpad_up);
+                robot.upArmMotor(1);
             }   
         
             if(gamepad1.dpad_down) { 
-                robot.downArmMotor(gamepad1.dpad_down);
+                robot.downArmMotor(1);
             }
                                                                             
             //claw code
             if(gamepad2.right_trigger > 0) {
-                clawOpenTele();
+                robot.clawOpenTele();
             }
             
             if(gamepad2.left_trigger > 0) {
-                clawCloseTele();
+                robot.clawCloseTele();
             }
         }
     }

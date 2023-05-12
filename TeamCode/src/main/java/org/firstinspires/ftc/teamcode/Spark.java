@@ -116,7 +116,7 @@ public class Spark {
                 motor4 = hwMap.dcMotor.get("motor4");
                 carouselMotor = hwMap.dcMotor.get("carouselMotor");
                 armMotor = hwMap.dcMotor.get("armMotor");
-                clawServo = hwMap.dcMotor.get("clawMotor");
+                clawServo = hwMap.servo.get("clawServo");
                 //Set directions to ensure that robot moves forward when
                 //all motor power is 1
                 motor1.setDirection(DcMotor.Direction.REVERSE);
@@ -370,16 +370,16 @@ public class Spark {
 
 //==================CLAW==================\\
     public void clawAuton(int degrees) {
-        map(degrees, 0, 180, 0, 1);
+       // map(degrees, 0, 180, 0, 1);
         clawServo.setPosition(degrees);
     }
     
     public void clawOpenTele() {
-        clawServo.setPosition(1);
+        clawServo.setPosition(0.65);
     }
 
     public void clawCloseTele() {
-        clawServo.setPosition(0);
+        clawServo.setPosition(0.2);
     }
 
     public void moveSpinny (double speed) {
