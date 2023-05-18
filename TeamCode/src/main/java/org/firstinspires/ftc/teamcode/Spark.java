@@ -36,7 +36,8 @@ public class Spark {
     public enum Drivetrain {
         HOLONOMIC,
         MECHANUM,
-        TANK
+        TANK,
+        SPARKY
     }
 
     //Constructor for Testing HardwareMap
@@ -109,6 +110,28 @@ public class Spark {
                 left = new DcMotor[]{motor2};
                 break;
             case MECHANUM:
+                //Map all motors to proper variables.
+                motor1 = hwMap.dcMotor.get("motor1");
+                motor2 = hwMap.dcMotor.get("motor2");
+                motor3 = hwMap.dcMotor.get("motor3");
+                motor4 = hwMap.dcMotor.get("motor4");
+                //Set directions to ensure that robot moves forward when
+                //all motor power is 1
+                motor1.setDirection(DcMotor.Direction.REVERSE);
+                motor2.setDirection(DcMotor.Direction.FORWARD);
+                motor3.setDirection(DcMotor.Direction.REVERSE);
+                motor4.setDirection(DcMotor.Direction.FORWARD);
+                //forward array contains all motors
+                forward = new DcMotor[]{motor1, motor2, motor3, motor4};
+                //left array contains motors that move at -1 power to turn left
+                left = new DcMotor[]{motor1, motor3};
+                //right array contains motors that move at -1 power to turn right
+                right = new DcMotor[]{motor2, motor4};
+                //special and unique are arrays for left/right movement in holonomic and mechanum
+                special = new DcMotor[]{motor2, motor3};
+                unique = new DcMotor[]{motor1, motor4};
+                break;
+            case SPARKY:
                 //Map all motors to proper variables.
                 motor1 = hwMap.dcMotor.get("motor1");
                 motor2 = hwMap.dcMotor.get("motor2");

@@ -19,7 +19,7 @@ public class SampleHardwareMapTest {
 
     @Test
     public void sampleHardwareMapTest() {
-        File hardwareMapFile = new File("src/main/res/xml/sparky.xml");
+        File hardwareMapFile = new File("src/test/res/xml/sample_hardware_map.xml");
         HardwareMap hwMap = new HardwareMap(null,null);
 
         try {

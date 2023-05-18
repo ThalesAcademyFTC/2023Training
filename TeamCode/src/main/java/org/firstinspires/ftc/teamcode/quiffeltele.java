@@ -12,7 +12,7 @@ public class quiffeltele extends OpMode {
 
     @Override
     public void init() {
-        robot = new Spark(this, Spark.Drivetrain.MECHANUM );
+        robot = new Spark(this, Spark.Drivetrain.SPARKY );
     }
 
     @Override
